@@ -4,7 +4,7 @@
 set -e
 
 # データディレクトリの初期化
-if [ ! -d "/var/lib/mysql/mysql" ]; then
+if [ ! -d "/var/lib/mysql/${MARIADIR}" ]; then
     echo "MariaDB data directory is empty. Initializing..."
     mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
@@ -28,9 +28,11 @@ EOF
 
     rm input.txt
 
-    echo "Starting MariaDB server..."
+    echo "MariaDB configuration completed." 
 else
     echo "MariaDB data directory already exists. Skipping initialization."
 fi
+
+echo "Starting MariaDB server..."
 
 exec "$@"
