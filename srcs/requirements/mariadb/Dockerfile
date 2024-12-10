@@ -21,5 +21,3 @@ EXPOSE 3306
 
 # スクリプトをエントリポイントとして設定
 ENTRYPOINT ["/usr/local/bin/startup.sh"]
-
-CMD ["mysqld"]
