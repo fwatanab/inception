@@ -1,31 +1,61 @@
 #!/bin/bash
 
-# my.cnf を動的に作成
-echo "[client]" > /etc/mysql/my.cnf
-echo "user=root" >> /etc/mysql/my.cnf
-echo "password=$MYSQL_ROOT_PASSWORD" >> /etc/mysql/my.cnf
-chmod 600 /etc/mysql/my.cnf
+# MariaDBの初期設定スクリプト
+set -e
 
-# # MySQLデーモンをフォアグラウンドで直接起動
-# mysqld --datadir=/var/lib/mysql --user=mysql --console
+# ログ出力設定
+LOG_FILE="/var/log/mariadb-setup.log"
+exec > >(tee -a "$LOG_FILE") 2>&1
 
-# MySQLデーモンをバックグラウンドで起動
-mysqld_safe &
+echo "Starting MariaDB initialization script..."
 
-# MySQLが起動するまで待機
-while ! mysqladmin ping --silent; do
-    sleep 1
+# 必須の環境変数を確認
+if [ -z "$MYSQL_ROOT_PASSWORD" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_PASSWORD" ] || [ -z "$MYSQL_DATABASE" ]; then
+    echo "Error: Required environment variables are not set." >&2
+    echo "Environment variables: MYSQL_ROOT_PASSWORD, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE" >&2
+    exit 1
+fi
+
+echo "Environment variables are properly set."
+
+# MariaDBを一時的に起動
+mysqld_safe --skip-networking --user=mysql &
+sleep 5
+
+# MariaDBの状態を確認
+echo "Waiting for MariaDB to be ready..."
+until mysqladmin ping --silent; do
+    sleep 2
 done
 
-# データベースの作成
-mysql -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;"
+# # データディレクトリの初期化
+# if [ ! -d "/var/lib/mysql/mysql" ]; then
+#     echo "MariaDB data directory is empty. Initializing..."
+#     mysqld --initialize-insecure --user=mysql --datadir=/var/lib/mysql
+# else
+#     echo "MariaDB data directory already exists. Skipping initialization."
+# fi
+# 
+# # MariaDBを起動して初期設定を実行
+# echo "Starting temporary MariaDB server for initialization..."
+# mysqld_safe --skip-networking --user=mysql &
+# sleep 5
 
-# ユーザー権限の設定
-mysql -e "GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
-mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';"
+echo "Configuring MariaDB..."
+mysql -u root -p"${MYSQL_ROOT_PASSWORD}" <<EOF
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
 
-# 権限変更を適用
-mysql -e "FLUSH PRIVILEGES;"
+CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-# コンテナを正常に保持
-wait $!
+CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
+
+FLUSH PRIVILEGES;
+EOF
+
+echo "MariaDB configuration completed. Shutting down temporary server..."
+mysqladmin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
+
+# 正常なMariaDB起動
+echo "Starting MariaDB server..."
+exec mysqld --user=mysql --datadir=/var/lib/mysql
