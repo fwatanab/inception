@@ -27,5 +27,7 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 # PHP-FPMの設定をカスタマイズ
 COPY conf/php-fpm.conf /etc/php/7.3/fpm/php-fpm.conf
 
+EXPOSE 9000
+
 # 初期化スクリプトを実行
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
