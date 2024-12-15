@@ -35,7 +35,10 @@ if [ ! -f /var/www/html/wp-config.php ]; then
       --admin_email="$WP_ADMIN_EMAIL" \
       --skip-email
 
-    echo "WordPress installation completed via WP-CLI."
+    echo "Creating an additional user via WP-CLI..."
+    wp user create "$WP_USER" "$WP_USER_EMAIL" --user_pass="$WP_USER_PASSWORD" --role="$WP_USER_ROLE" --allow-root
+
+    echo "WordPress installation and user creation completed via WP-CLI."
 fi
 
 echo "WordPress setup completed."
