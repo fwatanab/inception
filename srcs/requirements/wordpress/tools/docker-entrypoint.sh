@@ -24,10 +24,21 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     sed -i "s/username_here/$MYSQL_USER/" wp-config.php
     sed -i "s/password_here/$MYSQL_PASSWORD/" wp-config.php
     sed -i "s/localhost/$MYSQL_HOST/" wp-config.php
+
+    echo "Installing WordPress via WP-CLI..."
+    wp core install \
+      --allow-root \
+      --url="https://$DOMAIN_NAME" \
+      --title="$WP_TITLE" \
+      --admin_user="$WP_ADMIN_USER" \
+      --admin_password="$WP_ADMIN_PASSWORD" \
+      --admin_email="$WP_ADMIN_EMAIL" \
+      --skip-email
+
+    echo "WordPress installation completed via WP-CLI."
 fi
 
 echo "WordPress setup completed."
 
 # PHP-FPMを起動
 exec php-fpm7.3 -F
-
