@@ -7,7 +7,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - /home/${USER}/data/wordpress:/var/www/html
+      - wordpress_data:/var/www/html
     networks:
       - my_network
     restart: always
@@ -22,7 +22,7 @@ services:
     expose:
       - "3306"
     volumes:
-      - /home/${USER}/data/mariadb:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
     networks:
       - my_network
     restart: always
@@ -35,7 +35,7 @@ services:
     expose:
       - "9000"
     volumes:
-      - /home/${USER}/data/wordpress:/var/www/html
+      - wordpress_data:/var/www/html
     networks:
       - my_network
     restart: always
@@ -48,7 +48,16 @@ networks:
     driver: bridge
 
 volumes:
-  wordpress_data:
-    name: inception_wordpress_data
   mariadb_data:
-    name: inception_mariadb_data
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/${USER}/data/mariadb_data
+      o: bind
+
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/${USER}/data/wordpress_data
+      o: bind
