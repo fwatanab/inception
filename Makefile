@@ -4,6 +4,9 @@
 SRC_DIR := srcs
 DC_FILE := $(SRC_DIR)/docker-compose.yml
 ENV_FILE := $(SRC_DIR)/.env
+DATA_DIR := /home/$(USER)/data
+MARIADB_DIR := $(DATA_DIR)/mariadb_data
+WORDPRESS_DIR := $(DATA_DIR)/wordpress_data
 
 # Colors
 GREEN := "\033[1;32m"
@@ -13,8 +16,16 @@ RESET := "\033[0m"
 # Default Target
 all: up
 
+# Initialize Required Directories
+init:
+	@echo $(GREEN)"Initializing Directories for Volumes..."$(RESET)
+	@mkdir -p $(MARIADB_DIR)
+	@mkdir -p $(WORDPRESS_DIR)
+	@chmod 755 $(MARIADB_DIR)
+	@chmod 755 $(WORDPRESS_DIR)
+
 # Build and Run Containers
-up:
+up: init
 	@echo $(GREEN)"Building and Starting Containers..."$(RESET)
 	@docker-compose -f $(DC_FILE) --env-file $(ENV_FILE) up --build -d
 
@@ -41,4 +52,5 @@ logs:
 	@echo $(GREEN)"Displaying Logs for All Services:"$(RESET)
 	@docker-compose -f $(DC_FILE) logs
 
-.PHONY: all up down clean re status logs
+.PHONY: all up down clean re status logs init
+
