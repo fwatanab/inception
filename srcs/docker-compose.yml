@@ -52,12 +52,12 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/${USER}/data/mariadb_data
+      device: /${HOME}/data/mariadb_data
       o: bind
 
   wordpress_data:
     driver: local
     driver_opts:
       type: none
-      device: /home/${USER}/data/wordpress_data
+      device: /${HOME}/data/wordpress_data
       o: bind
