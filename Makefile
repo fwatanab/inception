@@ -4,7 +4,7 @@
 SRC_DIR := srcs
 DC_FILE := $(SRC_DIR)/docker-compose.yml
 ENV_FILE := $(SRC_DIR)/.env
-DATA_DIR := /home/$(USER)/data
+DATA_DIR := /${HOME}/data
 MARIADB_DIR := $(DATA_DIR)/mariadb_data
 WORDPRESS_DIR := $(DATA_DIR)/wordpress_data
 
