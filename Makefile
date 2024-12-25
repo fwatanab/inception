@@ -44,6 +44,8 @@ down:
 clean:
 	@echo $(RED)"Removing Containers, Networks, and Volumes..."$(RESET)
 	@sudo docker-compose -f $(DC_FILE) --env-file $(ENV_FILE) down -v
+	@echo $(RED)"Removing Local Volume Directories..."$(RESET)
+	@sudo rm -fr $(VOLUME_DIR)
 
 # Rebuild Everything
 re: clean all
