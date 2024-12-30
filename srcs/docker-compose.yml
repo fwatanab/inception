@@ -1,6 +1,6 @@
 services:
   nginx:
-    Image: nginx
+    image: nginx
     build: ./requirements/nginx
     container_name: nginx
     env_file:
@@ -16,7 +16,7 @@ services:
       - wordpress
 
   mariadb:
-    Image: mariadb
+    image: mariadb
     build: ./requirements/mariadb
     container_name: mariadb
     env_file:
@@ -29,13 +29,13 @@ services:
       - my_network
     restart: always
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p$$MYSQL_ROOT_PASSWORD"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p$MYSQL_ROOT_PASSWORD"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   wordpress:
-    Image: wordpress
+    image: wordpress
     build: ./requirements/wordpress
     container_name: wordpress
     env_file:
