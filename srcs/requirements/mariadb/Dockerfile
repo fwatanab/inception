@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:bullseye
 
 # 必要なパッケージをインストール
 RUN apt-get update && apt-get install -y mariadb-server \
