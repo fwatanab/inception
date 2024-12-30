@@ -44,4 +44,4 @@ fi
 echo "WordPress setup completed."
 
 # PHP-FPMを起動
-exec php-fpm7.3 -F
+exec php-fpm7.4 -F

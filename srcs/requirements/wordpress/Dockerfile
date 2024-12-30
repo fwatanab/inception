@@ -30,7 +30,7 @@ COPY tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # PHP-FPMの設定をカスタマイズ
-COPY conf/php-fpm.conf /etc/php/7.3/fpm/php-fpm.conf
+COPY conf/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
 
 EXPOSE 9000
 
