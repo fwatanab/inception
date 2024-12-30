@@ -20,14 +20,14 @@ all: up
 
 # Initialize Required Directories
 init:
-	@if [ ! -d "$(MARIADB_DIR)" ] || [ ! -d "$(WORDPRESS_DIR)" ]; then \
-		echo $(GREEN)"Initializing Directories for Volumes..."$(RESET); \
-		if [ ! -d "$(MARIADB_DIR)" ]; then \
-			sudo mkdir -p "$(MARIADB_DIR)" && chmod 755 "$(MARIADB_DIR)"; \
-		fi; \
-		if [ ! -d "$(WORDPRESS_DIR)" ]; then \
-			sudo mkdir -p "$(WORDPRESS_DIR)" && chmod 755 "$(WORDPRESS_DIR)"; \
-		fi; \
+	@echo $(GREEN)"Initializing Directories for Volumes..."$(RESET)
+	@if [ ! -d "$(MARIADB_DIR)" ]; then \
+		sudo mkdir -p "$(MARIADB_DIR)" && sudo chmod 755 "$(MARIADB_DIR)"; \
+		echo $(GREEN)"$(MARIADB_DIR) created."$(RESET); \
+	fi
+	@if [ ! -d "$(WORDPRESS_DIR)" ]; then \
+		sudo mkdir -p "$(WORDPRESS_DIR)" && sudo chmod 755 "$(WORDPRESS_DIR)"; \
+		echo $(GREEN)"$(WORDPRESS_DIR) created."$(RESET); \
 	fi
 
 # Build and Run Containers
