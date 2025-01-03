@@ -11,7 +11,7 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -out /etc/ssl/certs/nginx.crt \
     -subj "/CN=${DOMAIN_NAME}"
 
-RUN rm -f /etc/nginx/conf.d/default.conf || true
+
 RUN rm -f /etc/nginx/sites-enabled/default || true
 
 COPY conf/default.conf /etc/nginx/conf.d/default.conf
