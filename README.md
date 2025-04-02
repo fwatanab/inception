@@ -4,7 +4,7 @@
 Inceptionは、仮想マシン内でDockerを用いて複数のサービスを仮想化する42Tokyoのシステム管理プロジェクトです。Docker Composeを使用して、インフラ全体を自動的にセットアップします。
 
 ## 要件
-- Virtual Machine環境で実行
+- 推奨環境: Linux (VM環境はLinuxを使用)
 - DockerとDocker Composeのインストールが必要
 - 各サービスは専用のコンテナで実行
 - Dockerfileを自作し、イメージをビルド
