@@ -1,7 +1,8 @@
 # Inception
 
 ## 概要
-Inceptionは、仮想マシン内でDockerを用いて複数のサービスを仮想化する42Tokyoのシステム管理プロジェクトです。Docker Composeを使用して、インフラ全体を自動的にセットアップします。
+Inceptionは、仮想マシン内でDockerを用いて複数のサービスを仮想化するシステム管理プロジェクトです。<br>
+Docker Composeを使用して、インフラ全体を自動的にセットアップします。
 
 ## 要件
 - 推奨環境: Linux (VM環境はLinuxを使用)
@@ -58,6 +59,4 @@ https://domain_name
 - 環境変数や認証情報は `.env` ファイルに保存し、Git管理対象から除外
 - 無限ループを避けるため `tail -f` や `sleep infinity` は使用禁止
 
-## ライセンス
-このプロジェクトは42Tokyoの課題です。
 
